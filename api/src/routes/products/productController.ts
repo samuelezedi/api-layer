@@ -1,21 +1,76 @@
 import { Request, Response } from "express";
+import db from "../../db/index";
+import { productsTable } from "../../db/productsSchema";
+import { eq } from "drizzle-orm";
 
-export function listProducts(req: Request, res: Response) {
-  res.send(`products}`);
+export async function listProducts(req: Request, res: Response) {
+  try {
+    const products = await db.select().from(productsTable);
+    return res.json(products);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
 
-export function getProductById(req: Request, res: Response) {
-  res.send(`A product!${req.params.id}`);
+export async function getProductById(req: Request, res: Response) {
+  try {
+    const [product] = await db
+      .select()
+      .from(productsTable)
+      .where(eq(productsTable.id, req.params.id));
+
+    if (!product) {
+      res.status(400).send({ message: "Product not found" });
+    } else {
+      res.json(product);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
 
-export function createProduct(req: Request, res: Response) {
-  res.send("New products created.");
+export async function createProduct(req: Request, res: Response) {
+  try {
+    const [product] = await db
+      .insert(productsTable)
+      .values(req.body)
+      .returning();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
 
-export function updateProduct(req: Request, res: Response) {
-  res.send("products updated.");
+export async function updateProduct(req: Request, res: Response) {
+  try {
+    const [product] = await db
+      .update(productsTable)
+      .set(req.body)
+      .where(eq(productsTable.id, req.params.id))
+      .returning();
+
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).send({ message: "Product not found" });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
 
-export function deleteProduct(req: Request, res: Response) {
-  res.send("products deleted.");
+export async function deleteProduct(req: Request, res: Response) {
+  try {
+    const [deletedItem] = await db
+      .delete(productsTable)
+      .where(eq(productsTable.id, Number(req.params.id)))
+      .returning();
+    if (deletedItem) {
+      res.status(205).send({ message: "Product deleted" });
+    } else {
+      res.status(404).send({ message: "Product not found" });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
