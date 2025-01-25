@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 export async function listProducts(req: Request, res: Response) {
   try {
     const products = await db.select().from(productsTable);
-    return res.json(products);
+    res.json(products);
   } catch (error) {
     res.status(500).send(error);
   }

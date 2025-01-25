@@ -6,17 +6,26 @@ import {
   updateProduct,
   deleteProduct,
 } from "./productController";
+import { validateData } from "../../middleware/validationMiddleware";
+import { z } from "zod";
+import { createProductSchema, updateProductSchema } from "../../db/productsSchema";
 
 const productRouter = Router();
+
+// const createProductSchema = z.object({
+//   name: z.string(),
+//   price: z.number({message: "Price should be number"}),
+// });
+
 
 productRouter.get("/", listProducts);
 
 productRouter.get("/:id", getProductById);
 
-productRouter.post("/", createProduct);
+productRouter.post("/", validateData(createProductSchema), createProduct);
 
-productRouter.put("/:id", updateProduct);
+productRouter.put("/:id", validateData(updateProductSchema), updateProduct);
 
-productRouter.delete("/:id", deleteProduct)
+productRouter.delete("/:id", deleteProduct);
 
 export default productRouter;
