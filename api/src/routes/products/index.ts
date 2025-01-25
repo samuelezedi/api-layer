@@ -5,11 +5,11 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-} from "./productController";
-import { validateData } from "../../middleware/validationMiddleware";
+} from "./productController.js";
+import { validateData } from "../../middleware/validationMiddleware.js";
 import { z } from "zod";
-import { createProductSchema, updateProductSchema } from "../../db/productsSchema";
-import { verifyToken } from "../../middleware/authMiddleware";
+import { createProductSchema, updateProductSchema } from "../../db/productsSchema.js";
+import { verifyToken } from "../../middleware/authMiddleware.js";
 
 const productRouter = Router();
 
@@ -23,6 +23,7 @@ productRouter.get("/", listProducts);
 
 productRouter.get("/:id", getProductById);
 
+// @ts-ignore
 productRouter.post("/", verifyToken, validateData(createProductSchema), createProduct);
 
 productRouter.put("/:id", validateData(updateProductSchema), updateProduct);

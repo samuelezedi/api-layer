@@ -16,6 +16,7 @@ export function verifyToken(req: Request, res: Response, next: Response) {
       return;
     }
     req.userId = decoded.userId;
+    // @ts-ignore
     next();
   } catch (error) {
     res.status(401).json({ error: "Access denied" });
@@ -41,8 +42,9 @@ export function verifySeller(req: Request, res: Response, next: Response) {
         res.status(401).json({ error: "Access denied" });
         return;
       }
-      
+
       req.userId = decoded.userId;
+      // @ts-ignore
       next();
     } catch (error) {
       res.status(401).json({ error: "Access denied" });

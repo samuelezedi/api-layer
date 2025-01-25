@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import db from "../../db/index";
-import { productsTable } from "../../db/productsSchema";
+import db from "../../db/index.js";
+import { productsTable } from "../../db/productsSchema.js";
 import { eq } from "drizzle-orm";
 
 export async function listProducts(req: Request, res: Response) {
@@ -17,6 +17,7 @@ export async function getProductById(req: Request, res: Response) {
     const [product] = await db
       .select()
       .from(productsTable)
+      // @ts-ignore
       .where(eq(productsTable.id, req.params.id));
 
     if (!product) {
@@ -43,9 +44,11 @@ export async function createProduct(req: Request, res: Response) {
 
 export async function updateProduct(req: Request, res: Response) {
   try {
+    
     const [product] = await db
       .update(productsTable)
       .set(req.cleanBody)
+      // @ts-ignore
       .where(eq(productsTable.id, req.params.id))
       .returning();
 

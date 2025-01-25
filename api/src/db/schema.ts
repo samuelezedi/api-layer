@@ -1,3 +1,3 @@
-import * as productsTable from "./productsSchema";
+import * as productsTable from "./productsSchema.js";
 
 export default { ...productsTable };
