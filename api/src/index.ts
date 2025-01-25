@@ -1,5 +1,6 @@
 import express, { json, urlencoded } from "express";
 import productRouter from "./routes/products";
+import authRouter from "./routes/auth";
 
 const port = 3030;
 
@@ -12,6 +13,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/products", productRouter);
+app.use("/auth", authRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

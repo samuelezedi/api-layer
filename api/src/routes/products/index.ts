@@ -9,6 +9,7 @@ import {
 import { validateData } from "../../middleware/validationMiddleware";
 import { z } from "zod";
 import { createProductSchema, updateProductSchema } from "../../db/productsSchema";
+import { verifyToken } from "../../middleware/authMiddleware";
 
 const productRouter = Router();
 
@@ -22,7 +23,7 @@ productRouter.get("/", listProducts);
 
 productRouter.get("/:id", getProductById);
 
-productRouter.post("/", validateData(createProductSchema), createProduct);
+productRouter.post("/", verifyToken, validateData(createProductSchema), createProduct);
 
 productRouter.put("/:id", validateData(updateProductSchema), updateProduct);
 

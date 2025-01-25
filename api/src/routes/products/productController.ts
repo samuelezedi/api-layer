@@ -33,7 +33,7 @@ export async function createProduct(req: Request, res: Response) {
   try {
     const [product] = await db
       .insert(productsTable)
-      .values(req.body)
+      .values(req.cleanBody)
       .returning();
     res.status(201).json(product);
   } catch (error) {
@@ -45,7 +45,7 @@ export async function updateProduct(req: Request, res: Response) {
   try {
     const [product] = await db
       .update(productsTable)
-      .set(req.body)
+      .set(req.cleanBody)
       .where(eq(productsTable.id, req.params.id))
       .returning();
 
