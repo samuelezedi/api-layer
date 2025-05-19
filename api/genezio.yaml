@@ -1,0 +1,20 @@
+# The name of the project.
+name: ecommerce-api
+region: eu-central-1
+yamlVersion: 2
+backend:
+  path: ./
+  language:
+    name: js
+    packageManager: npm
+  scripts:
+    deploy: npm install && npm run build
+  functions:
+    # The name (label) of the function.
+    - name: ecom-express-api-function
+      # The path to the function's code.
+      path: ./
+      # The name of the function handler
+      handler: handler
+      # The entry point for the function.
+      entry: dist/src/index.js
